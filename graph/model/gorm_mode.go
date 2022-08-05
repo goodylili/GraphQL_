@@ -7,7 +7,7 @@ import (
 
 var (
 	DB *gorm.DB
-
+	err error
 )
 
 type BioData struct {
@@ -18,14 +18,13 @@ type BioData struct {
 
 
 func Database(DNS string) {
-
 	// function body goes here
-	DB, err = gorm.Open(sqlite.Open("test.db")), &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	err = db.AutoMigrate(&Human{})
+	err = DB.AutoMigrate(&BioData{})
 	if err != nil {
 		return
 	}
