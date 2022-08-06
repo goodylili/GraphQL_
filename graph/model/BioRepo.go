@@ -41,8 +41,7 @@ func (bio BioService) DeletePerson(id int) error {
 }
 
 func (bio BioService) GetAllPersons() ([]BioData, error) {
-	//TODO implement me
-	panic("implement me")
+	var bioInstance []BioData
+	err := bio.db.Find(&bioInstance).Error
+	return bioInstance, err
 }
-
-var _ BookRepository = &BioService{}
