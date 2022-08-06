@@ -3,11 +3,7 @@ package model
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-)
-
-var (
-	DB *gorm.DB
-	err error
+	"log"
 )
 
 type BioData struct {
@@ -16,17 +12,16 @@ type BioData struct {
 	Age  int    `json:"age"`
 }
 
-
-func Database(DNS string) {
+func Database() *gorm.DB {
 	// function body goes here
-	DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	err = DB.AutoMigrate(&BioData{})
+	err = db.AutoMigrate(&BioData{})
 	if err != nil {
-		return
+		log.Fatal("failed to migrate")
 	}
 
+	return db
 }
