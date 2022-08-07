@@ -25,3 +25,9 @@ func Database() *gorm.DB {
 
 	return db
 }
+
+func NewBookService(db *gorm.DB) *BioService {
+	return &BioService{
+		db: db,
+	}
+}
