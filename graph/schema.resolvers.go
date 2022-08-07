@@ -10,13 +10,28 @@ import (
 	"fmt"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+type Resolver struct {
+	BookRepository model.BioRepository
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+// CreateBio is the resolver for the createTodo field.
+// tell them to rename these
+func (r *mutationResolver) CreateBio(ctx context.Context, input model.BioData) (*model.BioData, error) {
+	person, err := r.BookRepository.CreatePerson(input)
+	person_ := &model.BioData{
+		ID:   person.ID,
+		Name: person.Name,
+		Age:  person.Age,
+	}
+	if err != nil {
+		return nil, err
+	}
+	return person_, err
+
+}
+
+// Bios is the resolver for the todos field.
+func (r *queryResolver) Bios(ctx context.Context) ([]*model.BioData, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

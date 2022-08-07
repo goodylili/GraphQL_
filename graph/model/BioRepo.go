@@ -2,7 +2,7 @@ package model
 
 import "gorm.io/gorm"
 
-type BookRepository interface {
+type BioRepository interface {
 	CreatePerson(bioData BioData) (BioData, error)
 	UpdatePerson(bioData BioData, id int) error
 	DeletePerson(id int) error
