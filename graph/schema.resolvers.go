@@ -4,20 +4,18 @@ package graph
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
-	"GraphQL_/graph/generated"
 	"GraphQL_/graph/model"
 	"context"
-	"fmt"
 )
 
-type Resolver struct {
-	BookRepository model.BioRepository
-}
+//type Resolver struct {
+//	BioRepository model.BioRepository
+//}
 
 // CreateBio is the resolver for the createTodo field.
 // tell them to rename these
 func (r *mutationResolver) CreateBio(ctx context.Context, input model.BioData) (*model.BioData, error) {
-	person, err := r.BookRepository.CreatePerson(input)
+	person, err := r.BioRepository.CreatePerson(input)
 	person_ := &model.BioData{
 		ID:   person.ID,
 		Name: person.Name,
@@ -31,15 +29,32 @@ func (r *mutationResolver) CreateBio(ctx context.Context, input model.BioData) (
 }
 
 // Bios is the resolver for the todos field.
-func (r *queryResolver) Bios(ctx context.Context) ([]*model.BioData, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Bios(ctx context.Context) ([]model.BioData, error) {
+	bio, err := r.BioRepository.GetAllPersons()
+	if err != nil {
+		return nil, err
+	}
+	return bio, nil
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+func (r *mutationResolver) UpdateBook(ctx context.Context, id int, input model.BioData) (string, error) {
+	err := r.BioRepository.UpdatePerson(input, id)
+	if err != nil {
+		return "nil", err
+	}
+	message := "successfully updated row"
 
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+	return message, nil
+}
+
+func (r *mutationResolver) DeleteBook(ctx context.Context, id int) (string, error) {
+	err := r.BioRepository.DeletePerson(id)
+	if err != nil {
+		return "", err
+	}
+	message := "successfully deleted row"
+	return message, nil
+}
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
